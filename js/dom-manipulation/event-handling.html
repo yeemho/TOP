@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Page Title</title>
+</head>
+<body>
+  <div class='container'>
+    <button id="btn">Click Me Too</button>
+  </div>
+  
+  <script>
+ 	// Adding and altering elements using DOM manipulation
+ 	  
+    const btn = document.querySelector('#btn');
+    btn.addEventListener('click', function(e){
+      console.log(e.target)
+      e.target.style.background = 'blue'
+    })
+
+   		 	  
+  </script>
+</body>
+</html>

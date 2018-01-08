@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Page Title</title>
+</head>
+<body>
+  <script>
+ 	// Adding and altering elements using DOM manipulation
+ 	  
+    const body = document.querySelector('body');
+ 	  
+ 	  //Add red p
+   	const redPara = document.createElement('p');
+   	redPara.textContent = "Hey I'm red!";
+   	redPara.style.color = 'red';
+   	body.appendChild(redPara);
+   	
+   	//add blue h3
+   	
+   	const blueHeading = document.createElement('h3');
+   	blueHeading.style.color = "blue";
+   	blueHeading.textContent = "Hey I'm a blue h3!";
+   	body.appendChild(blueHeading);
+   	
+   	//div with various styles and elements
+   	const div = document.createElement('div');
+   	div.setAttribute('style','background: pink; border: solid black');
+   	const heading = document.createElement('h1');
+   	heading.textContent = "I'm in a div!";
+   	div.appendChild(heading);
+   	const para = document.createElement('p');
+   	para.textContent = "ME TOO";
+   	div.appendChild(para);
+   	body.appendChild(div);
+   	
+   		 	  
+  </script>
+</body>
+</html>
