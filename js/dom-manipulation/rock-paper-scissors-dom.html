@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Page Title</title>
+</head>
+<body>
+  <div class="score">
+    <h2 id='your-score'></h2>
+    <h2 id='comp-score'></h2>   
+  </div>
+  <div class='container'>
+    <button type="button" name="rock" value="rock" onclick="">Rock</button>
+    <button type="button" name="paper" value="caption" onclick="">Paper</button>
+    <button type="button" name="scissors" value="caption" onclick="">Scissors</button>
+  </div>
+  <div id="results">
+    
+  </div>
+  <script>
+ 	// Your JavaScript goes here!
+ 	let moves = ["rock","paper","scissors"];
+ 	let playerWins;
+ 	let playerScore = 0;
+ 	let computerScore = 0;
+ 	
+ 	let computerPlay = () => {  
+ 	  return moves[Math.floor(Math.random()*3)];
+ 	}
+ 	
+ 	
+ 	function playRound(playerSelection , computerSelection) {
+ 	  
+ 	  let indexOfPlayer = moves.indexOf(playerSelection);
+ 	  let indexOfComp = moves.indexOf(computerSelection);
+ 	  
+ 	  if(indexOfComp == indexOfPlayer) {
+ 	    return "This is a tie."
+ 	  } 
+ 	    switch(indexOfComp) {
+ 	      case 0:
+ 	        if (indexOfPlayer == 1) {
+ 	          playerScore++;
+ 	          return "You win. Paper beats Rock."
+ 	        } else { 
+ 	          computerScore++;
+ 	          return "You lose. Rock beats Scissors."
+ 	          }
+   	      break;
+ 	      case 1:
+ 	         if (indexOfPlayer == 2) {
+ 	          playerScore++;
+ 	          return "You win. Scissors beats Paper."
+ 	        } else { 
+ 	          computerScore++;
+ 	          return "You lose. Paper beats Rock."
+ 	          }
+   	       break;
+ 	      case 2:
+   	       if (indexOfPlayer == 0) {
+   	        playerScore++;
+ 	          return "You win. Rock beats Scissors."
+ 	        } else { 
+ 	          computerScore++;
+ 	          return "You lose. Scissors beats Paper."
+ 	          }
+   	      break;
+   	      }
+ 	}
+ 	
+ 	function resetGame() {
+ 	  playerScore =0;
+ 	  computerScore =0;
+ 	  document.querySelector('#results').innerHTML ='';
+ 	}
+ 	
+ 	
+ 	function game(e) {
+ 	  
+ 	  //assign selections for each player
+ 	  const playerSelection = e.target.name;
+ 	  const computerSelection = computerPlay();
+    
+    //display results and running score
+ 	  const results = document.querySelector('#results');
+ 	  const para = document.createElement('p');
+ 	  const yourScore = document.querySelector('#your-score');
+ 	  const compScore = document.querySelector('#comp-score');
+ 	  
+ 	  
+ 	  para.textContent = `${playRound(playerSelection,computerSelection)}`
+ 	  yourScore.innerHTML = `You: ${playerScore}`;
+ 	  compScore.innerHTML = `Computer: ${computerScore}`;
+ 	  results.innerHTML = ''; //clear previous results
+ 	  results.appendChild(para);
+ 	  
+ 	  //announce winner and reset game
+ 	  if(playerScore == 5) {
+      resetGame();
+      results.innerHTML = "<h2>You win. Congrats!</h2>"
+ 	  } else if (computerScore == 5) {
+ 	    resetGame();
+ 	    results.innerHTML = "<h2>You lose! Try again.</h2>"
+ 	  } 
+ 	}
+ 	
+ 	const buttons = document.querySelectorAll('button');
+ 	buttons.forEach(btn => btn.addEventListener('click', game));
+ 	
+ /*	function game() {
+ 	  let playerScore=0;
+ 	  
+ 	  for (let round=0; round<5; round++) {
+      const playerSelection = prompt("Choose your move").toLowerCase(); 	
+      const computerSelection = computerPlay();  
+ 	    console.log(`Round ${round+1}: ${playRound(playerSelection,computerSelection)}`);
+ 	    if (playerWins) {
+ 	      playerScore++;
+ 	    }
+ 	  } 	  
+ 	  if (playerScore >=3) {
+ 	    console.log("You have won the game! Nice work buddy!")
+ 	  } else {console.log("You lose, try again!")}
+ 	}
+ 	
+ 	
+
+ 	console.log(game());*/
+ 	  
+  </script>
+</body>
+</html>
