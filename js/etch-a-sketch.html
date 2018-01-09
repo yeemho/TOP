@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Etch A Sketch</title>
+</head>
+<body>
+  <button type="button" name="refresh" value="caption" onclick="refreshCanvas();">Change Grid Dimension</button>
+  
+  <div class='container'>
+    
+  </div>
+  <script>
+  
+  
+ 	  const canvas = document.querySelector('.container');
+ 	  canvas.setAttribute('style','width:960px; height:960px; padding:0; margin:0; font-size:0; border:solid 1px black'); //set the size of canvas
+ 	  drawCanvas(10);
+ 	  
+ 	  function drawCanvas(gridLength) {
+   	  for(i=0; i<gridLength; i++) {
+   	      for(j=0; j< gridLength; j++) {
+       	    const square = document.createElement('div');
+       	    square.setAttribute('id','draw')
+       	    square.setAttribute('style','display:inline-block; margin:0; padding:0; border:0; background-color:none');
+       	    square.style.width = `${960/gridLength}px`;
+       	    square.style.height = `${960/gridLength}px`;
+       	    canvas.appendChild(square);
+       	  }
+   	  }
+   	  const blocks = document.querySelectorAll('#draw');
+ 	    blocks.forEach(block => block.addEventListener('mouseover', fillColour));
+    }
+ 	  
+ 	  
+ 	  function fillColour() {
+ 	    this.style.backgroundColor = 'black';
+ 	  }
+ 	  
+ 	  function refreshCanvas() {
+ 	    canvas.innerHTML = '';
+ 	    const dimension = prompt("How many squares per side would you like in the new grid?");
+ 	    drawCanvas(dimension);
+ 	  }
+ 	  
+ 	   
+  </script>
+</body>
+</html>
