@@ -29,14 +29,17 @@
     //getCalcParameters()
     var operator = displayValue.match(/[-*+/]/g); //put minus first otherwise it is read as a hypen
     var numbers = displayValue.match(/\d+\.*\d*/g);  
+    var num1;
+    var num2;
+    var subtotal;
    
     //Multiply and divide take operation precedence  
     while(operator.indexOf('*')!= -1 || operator.indexOf('/') !=-1) {
       for(var i=0; i<operator.length; i++) {
         if(operator[i] == '/' || operator[i] == '*') {
-          var num1 = numbers[i];
-          var num2 = numbers[i+1];
-          var subtotal = operate(operator[i],num1,num2);
+          num1 = numbers[i];
+          num2 = numbers[i+1];
+          subtotal = operate(operator[i],num1,num2);
           operator.splice(i,1);
           numbers.splice(i,2,subtotal);
         }   
@@ -46,15 +49,16 @@
     while(operator.indexOf('+')!= -1 || operator.indexOf('-') !=-1) {
       for(var i=0; i<operator.length; i++) {
         if(operator[i] == '+' || operator[i] == '-') {
-          var num1 = Number(numbers[i]);
-          var num2 = Number(numbers[i+1]);
-          var subtotal = operate(operator[i],num1,num2);
+          num1 = Number(numbers[i]);
+          num2 = Number(numbers[i+1]);
+          subtotal = operate(operator[i],num1,num2);
           operator.splice(i,1);
           numbers.splice(i,2,subtotal);
         }   
       }
     }     
-    return numbers[0];
+    const answer = numbers[0];
+    return answer.toString().split(".")[1].length > 5 ? answer.toFixed(5) : answer;
   }
   
   
@@ -62,49 +66,68 @@
   var isInitialInput = true;
   var prevIsNumber = false;
   var prevIsEqual = false;
-  var decimalUsed = false;
-  var inProgress = false;
+  var decimalInUse = false;
+  var chainCalc = false;
   
   //takes input parameter as a string and updates display
   function updateDisplay(input) {
     const display = document.querySelector('#display');
-    const pressedBtn = Number(input);
-   
-    switch (isInitialInput) {
-      case true:
-        if(input == '.' & decimalUsed == false) {
-          displayValue = `0${input}`;
-          isInitialInput = false;
-          prevIsNumber = false;
-          decimalUsed = true;
-        } else if (Number.isInteger(pressedBtn)) {
+    
+    if(Number.isInteger(Number(input))) { //input is a number
+      switch(chainCalc) {
+        case true:
           displayValue = input;
-          isInitialInput = false;
           prevIsNumber = true;
+          chainCalc = false;
+          break;
+        case false:
+          const lastChar = displayValue.substr(-1);
+          if (input == '0' && lastChar == '/') {
+            alert('Cannot divide by zero!')
+          } else {
+            displayValue += input;
+            prevIsNumber = true;
+          }
+          
+          break;
+      }
+    } else if (input == '.') { //input is a decimal
+        switch(decimalInUse) {
+          case true:
+            break;
+          case false:
+            if ( chainCalc || isInitialInput ) {
+              displayValue = `0${input}`;
+              decimalInUse = true;
+              prevIsNUmber = false;
+            } else if(prevIsNumber) {
+              displayValue += input;
+              decimalInUse = true;
+              prevIsNUmber = false;
+            }
+            break;
         }
-        break;
-      case false:
-        if(Number.isInteger(pressedBtn)) {//if prev is equal?
-          displayValue += input;
-          prevIsNumber = true;
-        } else if (prevIsNumber) {
-           if(input == '.') {
-              if(decimalUsed == false) { 
-                displayValue += input;
-                decimalUsed = true;
-              }
-           } else {
+    } else { // input is an operator
+         switch (chainCalc) {
+          case true:
+            displayValue = result.textContent + input;
+            prevIsNumber = false;
+            decimalInUse = false;
+            chainCalc = false;
+            break;
+          case false:
+            if(prevIsNumber) {
               displayValue += input;
               prevIsNumber = false;
-              decimalUsed = false;
-            }       
-        }
-        break;
-    }
-    display.textContent = displayValue;
+              decimalInUse = false;
+            }
+            break;
+        }       
+     }
+     console.log(displayValue);
+     display.textContent = displayValue;
   }
-  
-  
+   
   function clearDisplay() { 
     document.querySelector('#display').textContent = 0;
     document.querySelector('#result').textContent ='';
@@ -115,28 +138,34 @@
   
   function backSpace() {
     const display = document.querySelector('#display');
-    if (displayValue.length <= 1) {
-      displayValue = 0;
-    } else {
-      displayValue = displayValue.slice(0,-1);
+    switch (chainCalc) {
+      case false:
+        if (displayValue.length <= 1) {
+          displayValue = '0';
+          isInitialInput = true;
+        } else {
+          displayValue = displayValue.slice(0,-1);
+        }
     }
     display.textContent = displayValue;
   }
    
    
   //Event Listeners
-   const btns = document.querySelectorAll('.math');
-  btns.forEach(btn=> btn.addEventListener('click', function(e) {
-    updateDisplay(btn.value); 
-    console.log(btn.value);
+  
+  const btns = document.querySelectorAll('.math');
+  btns.forEach(btn=> btn.addEventListener('click', function() {
+    if (displayValue.length <= 20) {
+      updateDisplay(btn.value); 
+    } else { alert('Exceed max characters')}   
   }));
   
    const btnEqual = document.querySelector('button[name=equal]');
    btnEqual.addEventListener('click', function() {
     if(prevIsNumber) {
-      console.log(calculate());
       var solution = calculate();
       document.querySelector('#result').textContent = solution;
+      chainCalc = true;
     } else { alert('Invalid Entry')}
    })
  
