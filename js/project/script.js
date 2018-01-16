@@ -58,7 +58,12 @@
       }
     }     
     const answer = numbers[0];
-    return answer.toString().split(".")[1].length > 5 ? answer.toFixed(5) : answer;
+    if (answer.toString().indexOf('.') == -1) {
+      return answer;
+    } else {
+      return answer.toString().split(".")[1].length > 5 ? answer.toFixed(5) : answer;
+    }
+    
   }
   
   
@@ -130,7 +135,7 @@
    
   function clearDisplay() { 
     document.querySelector('#display').textContent = 0;
-    document.querySelector('#result').textContent ='';
+    document.querySelector('#result').textContent =0;
     displayValue='';
     isInitialInput = true;
     prevIsNumber = false;
