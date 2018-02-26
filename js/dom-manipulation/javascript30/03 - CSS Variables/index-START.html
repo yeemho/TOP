@@ -22,9 +22,17 @@
 
   <style>
 
-    /*
-      misc styles, nothing to do with CSS variables
-    */
+    :root {
+      --base:#ffc600;
+      --spacing:10px;
+      --blur: 10px;
+    }
+
+    img {
+      padding: var(--spacing);
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
 
     body {
       text-align: center;
@@ -45,6 +53,17 @@
   </style>
 
   <script>
+
+    function handleEvent() {
+      const suffix = this.dataset.sizing || '' ;
+      console.log(this.name);
+      document.documentElement.style.setProperty(`--${this.name}`, this.value+suffix);
+    }
+
+    const inputs = document.querySelectorAll('.controls input');
+    inputs.forEach( input => input.addEventListener('change', handleEvent));
+    inputs.forEach( input => input.addEventListener('mouseover', handleEvent));
+
   </script>
 
 </body>
