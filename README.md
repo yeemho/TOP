@@ -3,7 +3,7 @@ The Odin Project
 
 This repository houses all the programs I wrote as a part of The Odin Project.
 
-###Front End Development Projects:
+### Front End Development Projects:
 
 * Git test (Git workflow)
 * Google homepage (HTML/CSS) 
