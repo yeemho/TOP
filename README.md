@@ -1,7 +1,16 @@
 The Odin Project
 ================
 
-Current Completed Projects:
+This repository houses all my solutions to the exercises and projects that I complete as part of The Odin Project.
 
-* git test
-* Android logo
+#Front End Development Projects:
+
+* Git test (Git workflow)
+* Google homepage (HTML/CSS) 
+* Android logo (CSS)
+* JavaScript exercises
+* Etch-A-Sketch (JavaScript)
+* Rock-paper-Scissors (JavaScript)
+* Calculator (JavaScript)
+* Ruby exercises
+* Blogger App (Ruby on Rails)
