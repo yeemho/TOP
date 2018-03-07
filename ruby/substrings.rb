@@ -2,17 +2,17 @@
 def substrings(phrase, dictionary)
   word_count = {}
   
-  words = phrase.gsub(/[[:punct:]]/,'').downcase.split(' ')
+  words = phrase.gsub(/[[:punct:]]/,'').split(' ')
   words.collect do |word|
     dictionary.collect do |x|
-      expression = /#{x}/
+      expression = /#{x}/i
       if !expression.match(word).nil?
         word_count[x] = 0 if word_count[x].nil?
         word_count[x] += 1
       end
     end
   end
-   return word_count
+   word_count
 end
 
 dictionary = ["below","down","go","going","horn","how","howdy","it","i","low","own","part","partner","sit"]
