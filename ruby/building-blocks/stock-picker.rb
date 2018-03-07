@@ -1,73 +1,53 @@
-def stock_picker(array)
-  sorted = array.sort
-  i_min = 0
-  i_max = -1
-  min = sorted[i_min]
-  max = sorted[i_max]
-  numbers = array[0..-1]
-  
-  index_count = {}
-  
-  array.each_with_index do |val , index|
-    key = val
-    value = index
-    if !index_count.has_key?(key)
-      index_count[key] = []
-    end
-    index_count[key].push(value)
-  end
-  
- while numbers.index(min) == -1 #check if occurs twice in array before removing value from tracking
-  if index_count[min].length > 1 #check if the index of other instances are at edge case
-    break
+#loop through each price on buy day i
+      #loop through all following days (potential sell days) and find the difference -> save it into profit_by_sellday object. 
+      #End loop
+      #take the sell_day:profit k-v pair from profit_by_sellday object and save it into profit_by_buyday[buy_day] = {sell_day:profit}
+    #end loop
+    #take the buy and sell days with max profit
+    #If max profit is positive then result will equal these days of trade
+    #otherwise result is nil (no profitable trades)
+    
+def stock_picker(prices)
+  if prices.length < 2
+    result = nil
+  elsif prices.max == prices.min 
+    result = nil
   else
-    i_min += 1
-    min = sorted[i_min]
-    numbers = numbers[0...-1]
-  end
- end
- 
-
- while numbers.index(max) == 0 #check if occurs twice in array
-  if index_count[max].length > 1
-    break
-  else 
-    i_max -= 1
-    max = sorted[i_max]
-    numbers = numbers[1..-1] 
-  end
- end
- 
-  min_ascend = min
-  max_descend = max
- 
- while index_count[max].max < index_count[min_ascend].min do
-  i_min += 1
-  min_ascend = sorted[i_min]
- end
- 
- while index_count[max_descend].max < index_count[min].min do
-  i_max -= 1
-  max_descend = sorted[i_max]
- end
- 
- range_ascend = max - min_ascend
- range_descend = max_descend - min
- 
- min = range_ascend > range_descend ? min_ascend : min
- max = range_ascend > range_descend ? max : max_descend
-
- return [index_count[min].min,index_count[max].max]
-
+    result = optimal_profit(prices)
+  end 
+  result
 end
 
-p stock_picker([17,16,15,16,3,6,9,15,16,3,8,6,10,2,1])
+def optimal_profit(prices)
+  max_day = prices.index(prices.max)
+  min_day = prices.index(prices.min)
+    
+  if max_day > min_day
+    result = [min_day,max_day]
+  else
+    profits = {}
+    for i in 0..(prices.length-2) do
+      profits_by_sellday = {}
+      for j in (i+1)..(prices.length-1) do
+        profits_by_sellday[j] = prices[j] - prices[i]
+      end
+      max_profit_by_buyday = profits_by_sellday.select {|key,val| val == profits_by_sellday.values.max && val > 0}
+      profits[i] = max_profit_by_buyday unless max_profit_by_buyday.empty?
+    end
+    max_profit = 0
+    profits.each do |buyday,sell_info|
+      sellday = sell_info.keys[0]
+      profit = sell_info[sellday]
+      if profit > max_profit
+        result = [buyday,sellday]
+        max_profit = profit
+        p max_profit
+      end
+    end
+  end
+  result
+end
 
-=begin
-
-edge case, when the max number occurs before AND after the min number
-loop through and save duplicate indicies into a set
-
-=end
+stock_picker([17,16,15,16,3,6,9,15,16,3,8,6,10,2,1])
 
 
