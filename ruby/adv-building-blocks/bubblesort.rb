@@ -12,7 +12,7 @@ def bubble_sort(array)
         
      end
    end
-   array
+   p array
 end
 
-p bubble_sort([3,7,8,2,1,4,5])
+bubble_sort([3,7,8,2,1,4,5])
