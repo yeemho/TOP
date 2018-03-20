@@ -12,13 +12,14 @@
 module TicTacToe
   
     def all_same?
-      return self[0] == self[1] && self[0] == self[2]
+      return self[0] == self[1] && self[0] == self[2] && self[0]
     end
   
   class Board
+    attr_reader :grid
     def initialize
-      #@grid = Array.new(3) { Array.new(3) }
-      @grid = [["x",nil,"x"],[nil,"x",nil],[nil,nil,"x"]]
+      @grid = Array.new(3) { Array.new(3) }
+      #@grid = [["x",nil,"x"],[nil,"x",nil],[nil,nil,"x"]]
     end
     
     def get_index(position)
@@ -49,8 +50,8 @@ module TicTacToe
       return true
     end  
     
-    def winning_combo
-      @grid.each { |row| return true if row.all_same? }
+    def winning_combo?
+      self.grid.each { |row| return true if row.all_same? }
       #diagonals
       diagonal_pos = [[1,5,9],[3,5,7]]
       diagonals = diagonal_pos.map {|array| 
@@ -67,37 +68,50 @@ module TicTacToe
     attr_reader :board
     def initialize (player1, player2)
       @board = Board.new
-      @players = [player1,player2]
+      @player1 = player1
+      @player2 = player2
     end
         
     def game_over?
-      @board.none_empty? 
+      return "won" if @board.winning_combo?
+      return "tie" if @board.none_empty?
+      return false
     end
         
     def play
-      get_move(player1)
+      p game_over?
+      until game_over? do
+        get_move(@player1)
+        puts "Game over, #{@player1.name} has won!" if @board.winning_combo?
+        puts "Game over, it is a tie" if @board.none_empty?
+        if !game_over?
+          get_move(@player2) 
+          puts "Game over, #{@player1.name} has won!" if @board.winning_combo?
+          puts "Game over, it is a tie" if @board.none_empty?
+        end
+      end
     end
 
     def show
-      @board.each {|row| p row}
+      @board.grid.each {|row| p row}
     end  
     
     def get_move (player)
       puts "#{player.name}: Pick where to place your next move (number between 1 and 9)"
       move = gets.chomp
-      play_move(move,player.marker)
+      play_move(player,move,player.marker)
     end
     
-    def play_move(position,marker)
+    def play_move(player,position,marker)
        
-      x = @board.get_index(position)[0]
-      y = @board.get_index(position)[1]
+      index = @board.get_index(position)
+      x,y = index[0],index[1]
       
-      if @board[x][y]
-        puts "position has already been played"
-        get_move
+      if @board.grid[x][y]
+        puts "Position has already been played. Pick again"
+        get_move(player)
       else 
-        @board[x][y] = marker
+        @board.grid[x][y] = marker
         show
       end
     end
@@ -122,7 +136,5 @@ puts "Player 1: Please enter your name."
 player1 = Player.new(gets.chomp)
 puts "Player 2: Please enter your name."
 player2 = Player.new(gets.chomp)
+game = Game.new(player1,player2).play
 
-game = Game.new(player1,player2)
-p game.board.none_empty?
-p game.board.winning_combo
