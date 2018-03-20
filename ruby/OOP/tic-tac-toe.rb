@@ -19,7 +19,6 @@ module TicTacToe
     attr_reader :grid
     def initialize
       @grid = Array.new(3) { Array.new(3) }
-      #@grid = [["x",nil,"x"],[nil,"x",nil],[nil,nil,"x"]]
     end
     
     def get_index(position)
@@ -50,15 +49,28 @@ module TicTacToe
       return true
     end  
     
-    def winning_combo?
-      self.grid.each { |row| return true if row.all_same? }
-      #diagonals
-      diagonal_pos = [[1,5,9],[3,5,7]]
-      diagonals = diagonal_pos.map {|array| 
-        array.map {|pos| get_value(get_index(pos.to_s))}
+    def check_win(position_array)
+        values = position_array.map {|array| 
+          array.map {|pos| get_value(get_index(pos.to_s))}
         }
-      diagonals.each {|array| return true if array.all_same?}
-      return false
+        values.each {|array| return true if array.all_same?}
+        return false
+    end
+    
+    def winning_combo?
+      column_pos = [[1,4,7],[2,5,8],[3,6,9]]
+      diagonal_pos = [[1,5,9],[3,5,7]]
+      #rows
+      self.grid.each { |row| return true if row.all_same? }      
+      return true if check_win(column_pos)
+      return true if check_win(diagonal_pos)
+      
+      
+      #diagonals = diagonal_pos.map {|array| 
+       # array.map {|pos| get_value(get_index(pos.to_s))}
+        #}
+      #diagonals.each {|array| return true if array.all_same?}
+      #return false
     end
     
   end
@@ -82,12 +94,12 @@ module TicTacToe
       p game_over?
       until game_over? do
         get_move(@player1)
-        puts "Game over, #{@player1.name} has won!" if @board.winning_combo?
-        puts "Game over, it is a tie" if @board.none_empty?
+        return "Game over, #{@player1.name} has won!" if @board.winning_combo?
+        return "Game over, it is a tie" if @board.none_empty?
         if !game_over?
           get_move(@player2) 
-          puts "Game over, #{@player1.name} has won!" if @board.winning_combo?
-          puts "Game over, it is a tie" if @board.none_empty?
+          return "Game over, #{@player1.name} has won!" if @board.winning_combo?
+          return "Game over, it is a tie" if @board.none_empty?
         end
       end
     end
@@ -136,5 +148,6 @@ puts "Player 1: Please enter your name."
 player1 = Player.new(gets.chomp)
 puts "Player 2: Please enter your name."
 player2 = Player.new(gets.chomp)
-game = Game.new(player1,player2).play
+game = Game.new(player1,player2)
+p game.play
 
