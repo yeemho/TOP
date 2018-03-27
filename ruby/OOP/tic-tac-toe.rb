@@ -65,9 +65,8 @@ module TicTacToe
       return true if check_win(column_pos)
       return true if check_win(diagonal_pos)
       
-      
       #diagonals = diagonal_pos.map {|array| 
-       # array.map {|pos| get_value(get_index(pos.to_s))}
+       #array.map {|pos| get_value(get_index(pos.to_s))}
         #}
       #diagonals.each {|array| return true if array.all_same?}
       #return false
@@ -91,7 +90,6 @@ module TicTacToe
     end
         
     def play
-      p game_over?
       until game_over? do
         get_move(@player1)
         return "Game over, #{@player1.name} has won!" if @board.winning_combo?
