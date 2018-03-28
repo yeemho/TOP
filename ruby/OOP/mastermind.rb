@@ -54,7 +54,7 @@ module Mastermind
       @pattern.each_with_index { |x,i| 
         @red_pegs +=1 if x == code[i]
       }
-      @white_pegs = @pattern.select { |x| code.include?(x) }.length - @red_pegs
+      @white_pegs = (@pattern & code).length - @red_pegs
       return {red: @red_pegs, white: @white_pegs}
     end
   end
