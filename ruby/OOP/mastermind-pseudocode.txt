@@ -1,0 +1,97 @@
+Introduction - brief on the game
+Prompts user for choice of role
+Creates players and assigns roles based on player choice
+Creates game based on the players, initialized with secret code
+Play game
+
+
+Each game will have:
+2 players
+1 code
+12 guesses
+A play method - loop until game_over
+  to get guess, check guess, feedback
+At game over, print result of game
+
+Each player will be either human/computer
+  methods to make a guess
+    input = get input
+    if input is valid
+    return guess otherwise get input again
+  
+  Method to create a code
+    input = get input
+    if input is valid
+    return guess otherwise get input again
+    
+  get input method
+    prompts for input
+    transform into an array
+    
+  is_valid?
+      each element is an integer from 1 to 6
+
+Game (creator, guessor, code)
+  
+  Initialize so instance will save 
+    result will keep track of moves and feedback for that game instance
+    creator = creator
+    guessor = guessor
+    secret code = creator.get_code
+  
+  The play method starts the game
+    until the gameover? condition is met
+      guess = guessor.getguess
+      if guess.valid?
+        resultset checkguess (guess)
+      else
+        guessor.getguess
+      end
+      feedback(guess, resultset)
+    When gameover?
+      print the final game outcome
+  
+  gameover?
+    return you cracked the code if the code has been cracked 
+    return game over if no_guesses_left
+    
+  cracked
+    if red pegs == 4
+    
+  no_guesses_left
+    if rounds has reached 12
+    
+  checkguess (code)
+    checks the guess pattern against the code
+    returns the number of correct value and correct positions
+    
+  feedback(guess, feedbackset)
+    takes the round, guess and check result and adds to existing array of results
+    displays each row of entire results array on a new line in the console
+  
+ Players
+  role = guessor/creator
+  the guessor can make guess
+    computer - random 
+    human - prompt
+    validate the input
+    return the guess
+  the creator can create code
+    computer - random
+    human - prompt
+    validate the input
+    return the code
+end
+ 
+ Guess (player_input)
+ 
+ @@round to keep track of the number of guesses made
+ 
+ Initialize (player_input)
+  @value = player_input
+  @@round += 1
+  
+  
+  
+  
+
