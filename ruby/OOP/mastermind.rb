@@ -37,7 +37,7 @@ module Mastermind
   class Player
     attr_reader :type
     def initialize(type)
-      @type= type
+      @type = type
     end
     
     def get_code
@@ -45,6 +45,15 @@ module Mastermind
         when "human" then return get_input
         when "computer" then return Array.new(4){rand(1..6)}
       end
+    end
+    
+    def new_guess(prev_guess,secret_code)
+      case self.type
+        when "human" then return get_input
+        when "computer"
+          return prev_guess.pattern.map.with_index {|x,i| x == secret_code[i] ? x : rand(1..6)} if Guess.round > 0
+          return prev_guess.map.with_index {|x,i| x == secret_code[i] ? x : rand(1..6)} 
+      end  
     end
     
     def get_input
@@ -61,12 +70,13 @@ module Mastermind
 
     
   class Game
-    
+    attr_reader :guess
     def initialize(players)
       @creator = players[:creator]
       @guessor = players[:guessor]
       @moves = []
-      @result = {}          
+      @result = {}        
+      @guess = Array.new(4) {0}
     end
     
     def play
@@ -84,7 +94,7 @@ module Mastermind
     
     def get_guess
       puts "What is your guess?"
-      input = @guessor.get_code
+      input = @guessor.new_guess(@guess,@random_code)
       play_guess(input)        
     end
     

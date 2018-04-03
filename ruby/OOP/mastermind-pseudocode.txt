@@ -81,7 +81,9 @@ Game (creator, guessor, code)
     human - prompt
     validate the input
     return the code
-end
+`end
+ 
+ #
  
  Guess (player_input)
  
@@ -92,6 +94,20 @@ end
   @@round += 1
   
   
+ #AI
   
+  player.guess_code method
+    case guessor.type
+      when "human" then get_code
+      when "computer" then computer_guess
+    end
+  end
+  
+  def computer_guess (secret_code)
+    return @guess.map.with_index {|x,i| 
+      x == secret_code[i] ? x : rand(1..6)
+    }
+    
+  end
   
 
